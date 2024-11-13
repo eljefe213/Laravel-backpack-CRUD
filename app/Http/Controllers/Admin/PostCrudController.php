@@ -26,51 +26,25 @@ class PostCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Post::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/post');
-        CRUD::setEntityNameStrings('post', 'posts');
+        $this->crud->setModel(\App\Models\Post::class);
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/post');
+        $this->crud->setEntityNameStrings('post', 'posts');
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     * 
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
-    protected function setupListOperation()
+    public function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        $this->crud->addColumn(['name' => 'title', 'type' => 'text', 'label' => 'Title']);
+        $this->crud->addColumn(['name' => 'content', 'type' => 'text', 'label' => 'Content']);
     }
 
-    /**
-     * Define what happens when the Create operation is loaded.
-     * 
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     * @return void
-     */
-    protected function setupCreateOperation()
+    public function setupCreateOperation()
     {
-        CRUD::setValidation(PostRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        $this->crud->setValidation(PostRequest::class);
+        $this->crud->addField(['name' => 'title', 'type' => 'text', 'label' => 'Title']);
+        $this->crud->addField(['name' => 'content', 'type' => 'ckeditor', 'label' => 'Content']);
     }
 
-    /**
-     * Define what happens when the Update operation is loaded.
-     * 
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
-    protected function setupUpdateOperation()
+    public function setupUpdateOperation()
     {
         $this->setupCreateOperation();
     }
